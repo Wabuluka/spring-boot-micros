@@ -1,39 +1,29 @@
 name: Catalog Service
-
 on:
   push:
     paths:
       - catalog-services/**
     branches:
       - '**'
-
 jobs:
   build:
-    name: Build and Verify
+    name: Build
     runs-on: ubuntu-latest
     env:
       working-directory: ./catalog-services
     defaults:
-      run:
+      runs:
         working-directory: ${{ env.working-directory }}
+      steps:
+        - uses: actions/checkout@v4
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        - name: Setup Java 21
+          uses: actions/setup-java@v4
+          with:
+            java-version: '21'
+            distribution: 'temurin'
+            cache: 'maven'
 
-      - name: Setup Java 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: 'maven'
+        - name: Build with Maven
+          run: ./mvnw -ntp verify
 
-      - name: Build with Maven
-        run: ./mvnw -ntp verify
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: catalog-services/target/surefire-reports
