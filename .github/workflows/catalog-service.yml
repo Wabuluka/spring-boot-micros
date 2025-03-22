@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       working-directory: ./catalog-services
-    defaults:
-      runs:
-        working-directory: ${{ env.working-directory }}
+#    defaults:
+#      runs:
+#        working-directory: ${{ env.working-directory }}
 
     steps:
       - uses: actions/checkout@v4
